@@ -22,9 +22,8 @@ export default function Header() {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Courses", path: "/courses" },
-    // Only show Dashboard if user is logged in
     user ? { name: "Dashboard", path: "/dashboard" } : null,
-  ].filter(Boolean); // Filters out the null entry if user is not logged in
+  ].filter(Boolean); 
 
   return (
     <header
@@ -33,7 +32,7 @@ export default function Header() {
       }`}
     >
       <div className="container mx-auto flex justify-between items-center px-4">
-        {/* Logo */}
+        
         <Link
           to="/"
           className="text-2xl font-bold text-indigo-600 dark:text-indigo-400"
@@ -41,13 +40,12 @@ export default function Header() {
           LearnLoop
         </Link>
 
-        {/* Desktop Nav Links */}
+        
         <nav className="hidden md:flex items-center space-x-6">
           {navLinks.map((link) => (
             <NavLink
               key={link.name}
               to={link.path}
-              // Tailwind styles for active link
               className={({ isActive }) =>
                 `font-medium transition duration-200 py-1 ${
                   isActive
@@ -62,9 +60,8 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Right Section (Auth, Avatar & Theme Toggle) */}
         <div className="flex items-center space-x-4">
-          {/* Theme Toggle Button */}
+          
           <button
             onClick={toggleTheme}
             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
@@ -76,17 +73,16 @@ export default function Header() {
             )}
           </button>
 
-          {/* Conditional Auth Button/Avatar */}
           {user ? (
             <div className="flex items-center space-x-4">
-              {/* User Avatar */}
+              
               <img
-                src={user.photoURL || "https://i.pravatar.cc/150?img=68"} // Default avatar if photoURL is missing
+                src={user.photoURL || "https://i.pravatar.cc/150?img=68"} 
                 alt={user.displayName || "User"}
                 className="w-9 h-9 rounded-full cursor-pointer border-2 border-indigo-500 hover:border-indigo-400 transition"
                 title={user.displayName || user.email}
               />
-              {/* Logout Button */}
+              
               <button
                 onClick={handleLogout}
                 className="hidden sm:block px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
@@ -103,7 +99,6 @@ export default function Header() {
             </NavLink>
           )}
 
-          {/* Mobile Menu Button (Hamburger) */}
           <button
             className="md:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -130,7 +125,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown */}
       {isMenuOpen && (
         <nav
           className={`md:hidden mt-2 border-t ${
