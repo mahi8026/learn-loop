@@ -15,14 +15,13 @@ export default function AllCourses() {
     
     axios.get(`${import.meta.env.VITE_API_URL}/courses`)
       .then((res) => {
-        // FIX 1: Check if the response data is an array before setting state
+        
         if (Array.isArray(res.data)) {
             setCourses(res.data);
         } else {
-            // If the server returns something other than an array, handle it
             console.error("API response is not an array:", res.data);
             setError("Server returned data in an unexpected format.");
-            setCourses([]); // Ensure state is an empty array to prevent .map() crash
+            setCourses([]); 
         }
       })
       .catch((err) => {
@@ -39,8 +38,7 @@ export default function AllCourses() {
       ? courses
       : courses.filter((c) => c.category === category);
 
-  // FIX 2: Safely extract unique categories by checking if courses is an array.
-  // This is the direct fix for the crash on line 39.
+  
   const uniqueCategories = [
     ...new Set(
       Array.isArray(courses) 
@@ -74,7 +72,6 @@ export default function AllCourses() {
         </select>
       </div>
 
-      {/* Loading & Error States */}
       {loading && <div className="text-center py-12">Loading courses...</div>}
       {error && <div className="text-center py-12 text-red-600">{error}</div>}
       
@@ -84,7 +81,7 @@ export default function AllCourses() {
         </div>
       )}
 
-      {/* Courses Grid */}
+      
       {!loading && !error && filtered.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filtered.map((course) => (
@@ -101,13 +98,13 @@ export default function AllCourses() {
                 {course.title}
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 grow">
-                {/* Safely access course.description */}
+                
                 {course.description ? course.description.slice(0, 120) : 'No description available'}...
               </p>
               
               <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
                 <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  ৳{course.price}
+                  ${course.price}
                 </div>
                 <Link 
                   to={`/courses/${course._id}`} 

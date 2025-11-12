@@ -20,7 +20,7 @@ export default function AddCourse() {
   });
   const [submitting, setSubmitting] = useState(false);
 
-  // Auto-fill instructor info from Firebase user
+  
   useEffect(() => {
     if (user)
       setForm((f) => ({
@@ -42,7 +42,7 @@ export default function AddCourse() {
       setSubmitting(true);
       let imageUrl = form.image;
 
-      // Upload image if file selected
+      
       if (form.image instanceof File) {
         const key = import.meta.env.VITE_IMGBB_KEY;
         const data = new FormData();
@@ -65,7 +65,7 @@ export default function AddCourse() {
       });
     } catch (err) {
       console.error(err);
-      toast.error("❌ Failed to add course");
+      toast.error("Failed to add course");
     } finally {
       setSubmitting(false);
     }

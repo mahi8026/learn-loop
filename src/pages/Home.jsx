@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react"; // 👈 Add useState and useEffect
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 import { useTheme } from "../contexts/ThemeContext"; 
 import { Link } from "react-router-dom";
-import axios from 'axios'; // 👈 Import Axios for fetching data
+import axios from 'axios'; 
 
-// ⚠️ API Endpoint (Ensure your Express server is running on this port)
 const API_BASE_URL = 'http://localhost:5000/api';
 
-// --- Framer Motion Variants (Remains the same) ---
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -32,7 +31,7 @@ const itemVariants = {
   },
 };
 
-// --- Static Instructor Data (Remains the same) ---
+
 const instructorData = [
     { name: "Alex Smith", expertise: "Web Development", photo: "https://i.pravatar.cc/150?img=1" },
     { name: "Rina Ahmed", expertise: "Data Science", photo: "https://i.pravatar.cc/150?img=47" },
@@ -43,17 +42,15 @@ const instructorData = [
 export default function Home() {
   const { isDarkMode } = useTheme();
   
-  // 🟢 Add state for courses, loading, and error
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // 🟢 Data Fetching Logic
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        // GET request to fetch ALL courses
+       
         const response = await axios.get(`${API_BASE_URL}/courses`); 
         setCourses(response.data);
         setError(null);
@@ -67,10 +64,10 @@ export default function Home() {
     fetchCourses();
   }, []);
 
-  // Filter courses to find only the featured ones (isFeatured: true)
-  const featuredCourses = courses.filter(course => course.isFeatured).slice(0, 8); // Display up to 8
+ 
+  const featuredCourses = courses.filter(course => course.isFeatured).slice(0, 8); 
 
-  // ... (rest of the component logic)
+  
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
@@ -79,7 +76,7 @@ export default function Home() {
       </Helmet>
 
       <div className="container mx-auto px-4 py-12">
-        {/* --- 1. Hero/Banner Section (Remains the same) --- */}
+       
         <section className="mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -103,7 +100,7 @@ export default function Home() {
           </motion.div>
         </section>
         
-        {/* --- 2. Popular Courses Section (Dynamic Rendering) --- */}
+        
         <section className="mb-20">
           <h2 className="text-4xl font-extrabold mb-10 text-gray-800 dark:text-white transition-colors duration-300 text-center">
             Popular Courses
@@ -119,7 +116,7 @@ export default function Home() {
              <p className="text-center text-gray-500 dark:text-gray-400">No featured courses found.</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {/* 🟢 Map over the fetched and filtered featuredCourses */}
+              
               {featuredCourses.map((course, index) => (
                 <motion.div
                   key={course._id}
@@ -130,23 +127,23 @@ export default function Home() {
                   className="bg-white dark:bg-gray-800 rounded-xl shadow-lg transition-all duration-500 overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-2xl"
                 >
                   <img 
-                      src={course.imageURL} // 🟢 Dynamic Image
+                      src={course.imageURL} 
                       alt={course.title} 
                       className="w-full h-40 object-cover" 
                   />
                   <div className="p-5">
                       <h3 className="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">
-                          {course.title} {/* 🟢 Dynamic Title */}
+                          {course.title}
                       </h3>
                       <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                          {course.category} • {course.duration} {/* 🟢 Dynamic Category & Duration */}
+                          {course.category} • {course.duration}
                       </p>
                       <div className="flex justify-between items-center">
                           <span className="text-2xl font-bold text-gray-900 dark:text-white">
-                              ${course.price.toFixed(2)} {/* 🟢 Dynamic Price */}
+                              ${course.price.toFixed(2)}
                           </span>
                           <Link 
-                              to={`/details/${course._id}`} // 🟢 Dynamic Link to Details Page
+                              to={`/details/${course._id}`} 
                               className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition text-sm"
                           >
                               View Details
@@ -159,7 +156,7 @@ export default function Home() {
           )}
         </section>
 
-        {/* --- 3. Why Choose Us Section (Remains the same) --- */}
+        
         <section className="mb-20">
           <h2 className="text-4xl font-extrabold mb-10 text-gray-800 dark:text-white transition-colors duration-300 text-center">
             Why Choose Us
@@ -194,7 +191,7 @@ export default function Home() {
           </motion.div>
         </section>
 
-        {/* --- 4. Top Instructors Section (Remains the same) --- */}
+        
         <section>
           <h2 className="text-4xl font-extrabold mb-10 text-gray-800 dark:text-white transition-colors duration-300 text-center">
             Top Instructors

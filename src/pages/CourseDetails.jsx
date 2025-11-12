@@ -13,7 +13,7 @@ export default function CourseDetails() {
     document.title = "Course Details - LearnLoop";
   }, []);
 
-  // ✅ Fetch single course
+  
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/courses/${id}`)
@@ -21,7 +21,7 @@ export default function CourseDetails() {
       .catch(() => toast.error("Failed to load course details"));
   }, [id]);
 
-  // ✅ Handle enroll (save in MongoDB)
+  
   const handleEnroll = async () => {
     if (!user) {
       toast.error("Please login to enroll");
