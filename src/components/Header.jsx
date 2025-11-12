@@ -23,7 +23,7 @@ export default function Header() {
     { name: "Home", path: "/" },
     { name: "Courses", path: "/courses" },
     user ? { name: "Dashboard", path: "/dashboard" } : null,
-  ].filter(Boolean); 
+  ].filter(Boolean);
 
   return (
     <header
@@ -32,7 +32,6 @@ export default function Header() {
       }`}
     >
       <div className="container mx-auto flex justify-between items-center px-4">
-        
         <Link
           to="/"
           className="text-2xl font-bold text-indigo-600 dark:text-indigo-400"
@@ -40,7 +39,6 @@ export default function Header() {
           LearnLoop
         </Link>
 
-        
         <nav className="hidden md:flex items-center space-x-6">
           {navLinks.map((link) => (
             <NavLink
@@ -61,7 +59,6 @@ export default function Header() {
         </nav>
 
         <div className="flex items-center space-x-4">
-          
           <button
             onClick={toggleTheme}
             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
@@ -75,14 +72,13 @@ export default function Header() {
 
           {user ? (
             <div className="flex items-center space-x-4">
-              
               <img
-                src={user.photoURL || "https://i.pravatar.cc/150?img=68"} 
+                src={user.photoURL || "https://i.pravatar.cc/150?img=68"}
                 alt={user.displayName || "User"}
                 className="w-9 h-9 rounded-full cursor-pointer border-2 border-indigo-500 hover:border-indigo-400 transition"
                 title={user.displayName || user.email}
               />
-              
+
               <button
                 onClick={handleLogout}
                 className="hidden sm:block px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
