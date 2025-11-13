@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
+import { FaGoogle } from "react-icons/fa6";
+import { FcGoogle } from "react-icons/fc";
 
 export default function Login() {
   const { login, signInWithGoogle } = useAuth();
@@ -23,7 +25,7 @@ export default function Login() {
     }
   };
   return (
-    <div className="container mx-auto px-4 py-8 border-2 rounded-lg max-w-md mt-4">
+    <div className="container shadow-2xl mx-auto px-4 py-8 bg-gray-900  rounded-lg max-w-md mt-4">
       <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-4">Login</h1>
       <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
@@ -48,7 +50,7 @@ export default function Login() {
           </Link>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded"
+            className="px-8 py-2 bg-blue-600 text-white rounded"
           >
             Login
           </button>
@@ -64,9 +66,9 @@ export default function Login() {
               toast.error("Google sign in failed");
             }
           }}
-          className="px-4 py-2 border rounded"
+          className="btn btn-outline btn-primary w-full"
         >
-          Sign in with Google
+         <FcGoogle size={24} /> Sign in with Google
         </button>
       </div>
     </div>

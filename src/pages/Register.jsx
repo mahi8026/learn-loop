@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FcGoogle } from "react-icons/fc";
 
 export default function Register() {
   const { register, signInWithGoogle } = useAuth();
@@ -33,7 +34,7 @@ export default function Register() {
     }
   };
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container shadow-2xl mx-auto px-4 py-8 bg-gray-900  rounded-lg max-w-md mt-4">
       <h1 className="text-2xl font-bold mb-4">Register</h1>
       <form onSubmit={handleSubmit} className="space-y-4 max-w-md">
         <input
@@ -67,7 +68,7 @@ export default function Register() {
         <div className="flex items-center justify-between">
           <button
             type="submit"
-            className="px-4 py-2 bg-green-600 text-white rounded"
+            className="px-4 w-full py-2 font-semibold bg-green-600 hover:bg-green-800 text-white rounded"
           >
             Register
           </button>
@@ -83,9 +84,9 @@ export default function Register() {
               toast.error("Google sign in failed");
             }
           }}
-          className="px-4 py-2 border rounded"
+          className="btn btn-outline btn-primary w-full"
         >
-          Sign up with Google
+         <FcGoogle size={24} /> Sign up with Google
         </button>
       </div>
     </div>
