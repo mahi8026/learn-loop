@@ -60,7 +60,7 @@ export default function CourseDetails() {
           <h1 className="text-2xl font-bold">{course.title}</h1>
           <p className="mt-3">{course.description}</p>
           <div className="mt-4 flex items-center justify-between">
-            <span className="font-semibold text-lg text-gray-700">
+            <span className="font-semibold text-lg text-white-700">
               ${course.price} | {course.duration}
             </span>
             <button

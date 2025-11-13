@@ -12,21 +12,23 @@ export default function AllCourses() {
   useEffect(() => {
     setLoading(true);
     setError(null);
-    
-    axios.get(`${import.meta.env.VITE_API_URL}/courses`)
+
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/courses`)
       .then((res) => {
-        
         if (Array.isArray(res.data)) {
-            setCourses(res.data);
+          setCourses(res.data);
         } else {
-            console.error("API response is not an array:", res.data);
-            setError("Server returned data in an unexpected format.");
-            setCourses([]); 
+          console.error("API response is not an array:", res.data);
+          setError("Server returned data in an unexpected format.");
+          setCourses([]);
         }
       })
       .catch((err) => {
         console.error("Error fetching courses:", err);
-        setError("Failed to load courses. Please check the network connection.");
+        setError(
+          "Failed to load courses. Please check the network connection."
+        );
       })
       .finally(() => {
         setLoading(false);
@@ -38,11 +40,10 @@ export default function AllCourses() {
       ? courses
       : courses.filter((c) => c.category === category);
 
-  
   const uniqueCategories = [
     ...new Set(
-      Array.isArray(courses) 
-        ? courses.map((c) => c.category).filter(Boolean) 
+      Array.isArray(courses)
+        ? courses.map((c) => c.category).filter(Boolean)
         : []
     ),
   ];
@@ -61,7 +62,7 @@ export default function AllCourses() {
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors"
+          className="p-3 bg-blue-950 font-semibold border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition-colors"
         >
           <option value="all">All Categories</option>
           {uniqueCategories.map((cat) => (
@@ -74,23 +75,26 @@ export default function AllCourses() {
 
       {loading && <div className="text-center py-12">Loading courses...</div>}
       {error && <div className="text-center py-12 text-red-600">{error}</div>}
-      
+
       {!loading && !error && filtered.length === 0 && (
         <div className="text-center py-12 text-gray-500">
           No courses match the current category.
         </div>
       )}
 
-      
       {!loading && !error && filtered.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((course) => (
-            <div 
-              key={course._id} 
+            <div
+              key={course._id}
               className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col"
             >
               <img
-                src={course.image || 'https://placehold.co/600x400/3B82F6/FFFFFF?text=Course'}
+                src={
+                  course.imageURL ||
+                  course.image ||
+                  "https://placehold.co/600x400/3B82F6/FFFFFF?text=Course"
+                }
                 alt={course.title}
                 className="w-full h-48 object-cover mb-4 rounded-lg"
               />
@@ -98,16 +102,18 @@ export default function AllCourses() {
                 {course.title}
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 grow">
-                
-                {course.description ? course.description.slice(0, 120) : 'No description available'}...
+                {course.description
+                  ? course.description.slice(0, 120)
+                  : "No description available"}
+                ...
               </p>
-              
+
               <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
                 <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                   ${course.price}
                 </div>
-                <Link 
-                  to={`/courses/${course._id}`} 
+                <Link
+                  to={`/courses/${course._id}`}
                   className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   View Details
