@@ -74,7 +74,7 @@ export default function AddCourse() {
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-4">Add Course</h1>
-      <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded shadow">
+      <form onSubmit={handleSubmit} className="space-y-4  p-6 rounded shadow">
         <input name="title" value={form.title} onChange={handleChange} placeholder="Title" className="w-full p-2 border rounded" required />
         <input name="image" value={form.image} onChange={handleChange} placeholder="Image URL" className="w-full p-2 border rounded" />
         <input name="price" value={form.price} onChange={handleChange} placeholder="Price" className="w-full p-2 border rounded" required />

@@ -26,7 +26,7 @@ export default function Enrolled() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {enrolled.map((e) => (
-            <div key={e._id} className="bg-white p-4 rounded shadow">
+            <div key={e._id} className=" p-4 rounded shadow">
               <h3 className="font-semibold">{e.title}</h3>
               <p className="text-sm text-gray-500">
                 Enrolled on {new Date(e.enrolledAt).toLocaleDateString()}

@@ -51,10 +51,11 @@ export default function CourseDetails() {
     <div className="container mx-auto px-4 py-8">
       <div className="grid md:grid-cols-3 gap-6">
         <img
-          src={course.image}
-          alt={course.title}
-          className="w-full h-64 object-cover rounded"
-        />
+  src={course.image || course.imageURL || "https://via.placeholder.com/600x400?text=No+Image"}
+  alt={course.title}
+  className="w-full h-64 object-cover rounded"
+/>
+
         <div className="md:col-span-2">
           <h1 className="text-2xl font-bold">{course.title}</h1>
           <p className="mt-3">{course.description}</p>

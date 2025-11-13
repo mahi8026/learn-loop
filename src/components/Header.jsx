@@ -19,11 +19,12 @@ export default function Header() {
     }
   };
 
+
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Courses", path: "/courses" },
-    user ? { name: "Dashboard", path: "/dashboard" } : null,
-  ].filter(Boolean);
+    ...(user ? [{ name: "Dashboard", path: "/dashboard" }] : []),
+  ]
 
   return (
     <header
@@ -32,6 +33,7 @@ export default function Header() {
       }`}
     >
       <div className="container mx-auto flex justify-between items-center px-4">
+        
         <Link
           to="/"
           className="text-2xl font-bold text-indigo-600 dark:text-indigo-400"
@@ -39,6 +41,7 @@ export default function Header() {
           LearnLoop
         </Link>
 
+        
         <nav className="hidden md:flex items-center space-x-6">
           {navLinks.map((link) => (
             <NavLink
@@ -58,7 +61,9 @@ export default function Header() {
           ))}
         </nav>
 
+        
         <div className="flex items-center space-x-4">
+          
           <button
             onClick={toggleTheme}
             className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
@@ -70,6 +75,7 @@ export default function Header() {
             )}
           </button>
 
+         
           {user ? (
             <div className="flex items-center space-x-4">
               <img
@@ -78,7 +84,6 @@ export default function Header() {
                 className="w-9 h-9 rounded-full cursor-pointer border-2 border-indigo-500 hover:border-indigo-400 transition"
                 title={user.displayName || user.email}
               />
-
               <button
                 onClick={handleLogout}
                 className="hidden sm:block px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
@@ -95,6 +100,7 @@ export default function Header() {
             </NavLink>
           )}
 
+         
           <button
             className="md:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -121,6 +127,7 @@ export default function Header() {
         </div>
       </div>
 
+      
       {isMenuOpen && (
         <nav
           className={`md:hidden mt-2 border-t ${
