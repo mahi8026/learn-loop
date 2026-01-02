@@ -3,6 +3,8 @@ import {
   onAuthStateChanged, 
   signInWithPopup, 
   GoogleAuthProvider, 
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut 
 } from "firebase/auth";
 import { auth } from "../firebase/firebase.config";
@@ -12,18 +14,30 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [dbUser, setDbUser] = useState(null); // Stores MongoDB User data (role, status)
+  const [dbUser, setDbUser] = useState(null); 
   const [loading, setLoading] = useState(true);
 
   const googleProvider = new GoogleAuthProvider();
 
-  // 1. Google Login
+  // 1. Register with Email/Password
+  const register = (email, password) => {
+    setLoading(true);
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
+
+  // 2. Login with Email/Password
+  const login = (email, password) => {
+    setLoading(true);
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  // 3. Google Login
   const loginWithGoogle = () => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
-  // 2. Logout
+  // 4. Logout
   const logout = () => {
     setLoading(true);
     return signOut(auth);
@@ -62,8 +76,10 @@ export const AuthProvider = ({ children }) => {
 
   const authInfo = {
     user,
-    dbUser, // Use this for role-based logic (dbUser.role)
+    dbUser, 
     loading,
+    register,
+    login,
     loginWithGoogle,
     logout,
   };

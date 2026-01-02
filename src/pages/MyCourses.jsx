@@ -46,7 +46,7 @@ export default function MyCourses() {
       <div className="grid grid-cols-1 gap-4">
         {courses.map((course) => (
           <div key={course._id} className="bg-white dark:bg-gray-900 p-6 rounded-3xl border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row items-center gap-6 group hover:border-indigo-200 transition-all">
-            <img src={course.image} className="w-full md:w-32 h-24 object-cover rounded-2xl" alt="" />
+            <img src={course.image || course.imageURL}className="w-full md:w-32 h-24 object-cover rounded-2xl" alt="" />
             <div className="flex-1 text-center md:text-left">
               <h3 className="text-xl font-bold dark:text-white">{course.title}</h3>
               <div className="flex justify-center md:justify-start gap-4 mt-2">

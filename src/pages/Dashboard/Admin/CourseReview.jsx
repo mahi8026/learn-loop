@@ -51,7 +51,7 @@ export default function CourseReview() {
           {courses.map(course => (
             <div key={course._id} className="bg-white dark:bg-gray-900 p-6 rounded-3xl border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
               <div className="flex items-center gap-4">
-                <img src={course.image} className="w-20 h-20 rounded-2xl object-cover" alt="" />
+                <img src={course.image || course.imageURL} className="w-20 h-20 rounded-2xl object-cover" alt="" />
                 <div>
                   <h3 className="font-bold text-lg dark:text-white">{course.title}</h3>
                   <p className="text-sm text-gray-500">Instructor: {course.instructorEmail}</p>

@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { FcGoogle } from "react-icons/fc";
 
 export default function Login() {
-  const { login, signInWithGoogle } = useAuth();
+  const { login, loginWithGoogle } = useAuth(); // Corrected names
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/dashboard";
@@ -13,12 +13,24 @@ export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
-  // Requirement #6: Demo Credentials Button
+  // Requirement: Demo Credentials
   const handleDemoLogin = () => {
     setForm({ email: "instructor@learnloop.com", password: "Password123!" });
     toast.info("Demo credentials filled!");
   };
 
+  // Google Login Handler
+  const handleGoogleSignIn = async () => {
+    try {
+      await loginWithGoogle();
+      toast.success("Welcome back!");
+      navigate(from, { replace: true });
+    } catch (err) {
+      toast.error("Google Sign-in failed");
+    }
+  };
+
+  // Email/Password Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -48,7 +60,7 @@ export default function Login() {
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 ring-indigo-500 dark:text-white transition-all"
+              className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 ring-indigo-500 dark:text-white transition-all outline-none"
               placeholder="name@company.com"
               required
             />
@@ -59,7 +71,7 @@ export default function Login() {
               type="password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 ring-indigo-500 dark:text-white transition-all"
+              className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 ring-indigo-500 dark:text-white transition-all outline-none"
               placeholder="••••••••"
               required
             />
@@ -76,7 +88,8 @@ export default function Login() {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <button onClick={() => signInWithGoogle()} className="flex items-center justify-center gap-2 py-3 border border-gray-200 dark:border-gray-700 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all dark:text-white">
+          {/* Corrected onClick call */}
+          <button onClick={handleGoogleSignIn} className="flex items-center justify-center gap-2 py-3 border border-gray-200 dark:border-gray-700 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all dark:text-white">
             <FcGoogle size={20}/> Google
           </button>
           <button onClick={handleDemoLogin} className="flex items-center justify-center gap-2 py-3 bg-emerald-50 text-emerald-600 rounded-2xl font-bold hover:bg-emerald-100 transition-all">

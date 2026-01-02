@@ -90,7 +90,7 @@ export default function CourseDetails() {
           {/* Sticky Enrollment Card */}
           <div className="relative">
             <div className="lg:sticky lg:top-24 bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
-              <img src={course.image} className="w-full h-56 object-cover" alt="" />
+              <img src={course.image || course.imageURL} className="w-full h-56 object-cover" alt="" />
               <div className="p-8">
                 <div className="flex items-baseline gap-2 mb-6">
                   <span className="text-4xl font-black dark:text-white">${course.price}</span>

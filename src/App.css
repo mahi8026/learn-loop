@@ -1,0 +1,16 @@
+/* 1. Prevent text from getting too wide/legibility */
+p {
+  max-width: 65ch; /* Standard for professional reading density */
+}
+
+/* 2. Tighten default line heights */
+h1, h2, h3 {
+  line-height: 1.1 !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* 3. Reduce container padding on mobile */
+.container {
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+}
