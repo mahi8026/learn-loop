@@ -5,8 +5,8 @@ LearnLoop is a high-performance, full-stack e-learning marketplace designed for 
 
 
 ## 🚀 Live Demo
-**Frontend:** [Your Vercel Link Here]  
-**Backend:** [Your Render/Heroku Link Here]
+**Frontend:** Working assignment 10
+**Backend:** 
 
 ## ✨ Key Features
 
@@ -25,9 +25,3 @@ LearnLoop is a high-performance, full-stack e-learning marketplace designed for 
 - **Security:** Firebase Auth, Environment variables (VITE_).
 - **State/UI Management:** Context API, React-Toastify, React-Helmet.
 
-## 📦 Installation & Setup
-
-1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/yourusername/learn-loop.git](https://github.com/yourusername/learn-loop.git)
-   cd learn-loop
