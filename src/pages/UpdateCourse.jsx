@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
 import { useAuth } from "../contexts/AuthContext";
+import { FaSave, FaArrowLeft } from "react-icons/fa";
 
 export default function UpdateCourse() {
   const { id } = useParams();
@@ -13,145 +14,102 @@ export default function UpdateCourse() {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState(null);
 
-  
   useEffect(() => {
-    setLoading(true);
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/courses/${id}`)
+    axios.get(`${import.meta.env.VITE_API_URL}/courses/${id}`)
       .then((res) => {
-        
         if (res.data.instructorEmail !== user?.email) {
-          toast.error("You are not authorized to edit this course.");
+          toast.error("Unauthorized access");
           navigate("/dashboard/my-courses");
           return;
         }
         setCourse(res.data);
       })
-      .catch((err) => {
-        console.error(err);
-        setError("Failed to fetch course details.");
-        toast.error("Failed to load course for editing.");
-      })
+      .catch(() => toast.error("Failed to load course"))
       .finally(() => setLoading(false));
   }, [id, user?.email, navigate]);
 
-  
-  const handleChange = (e) => {
-    setCourse({ ...course, [e.target.name]: e.target.value });
-  };
-  
- 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    
-    const { _id, ...updateData } = course;
-    
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL}/courses/${id}`, updateData);
-      
+      await axios.patch(`${import.meta.env.VITE_API_URL}/courses/${id}`, course);
       toast.success("Course updated successfully!");
-      navigate(`/courses/${id}`);
+      navigate("/dashboard/my-courses");
     } catch (err) {
-      console.error(err);
-      toast.error("Failed to update course. Please try again.");
+      toast.error("Update failed");
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (loading) return <div className="text-center py-20">Loading course data...</div>;
-  if (error || !course) return <div className="text-center py-20 text-red-600">{error || "Course not found."}</div>;
+  if (loading) return <div className="flex justify-center p-20"><span className="loading loading-spinner loading-lg"></span></div>;
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-3xl dark:bg-gray-900 min-h-screen">
-      <Helmet>
-        <title>Update Course: {course.title}</title>
-      </Helmet>
+    <div className="max-w-3xl mx-auto">
+      <Helmet><title>Update {course?.title} | LearnLoop</title></Helmet>
       
-      <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">
-        Update Course: {course.title}
-      </h1>
+      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-500 hover:text-indigo-600 mb-6 font-bold transition-colors">
+        <FaArrowLeft /> Back to My Courses
+      </button>
 
-      <form onSubmit={handleSubmit} className="space-y-6 bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+      <div className="bg-white dark:bg-gray-900 rounded-[2.5rem] p-8 md:p-12 shadow-sm border border-gray-100 dark:border-gray-800">
+        <h2 className="text-3xl font-black mb-8 dark:text-white">Update Course Details</h2>
         
-       
-        <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            value={course.title || ''}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          />
-        </div>
-        
-       
-        <div>
-          <label htmlFor="price" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Price ($)</label>
-          <input
-            type="number"
-            id="price"
-            name="price"
-            value={course.price || ''}
-            onChange={handleChange}
-            required
-            step="0.01"
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          />
-        </div>
-        
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
-          <input
-            type="text"
-            id="category"
-            name="category"
-            value={course.category || ''}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="md:col-span-2">
+              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Title</label>
+              <input
+                value={course.title}
+                onChange={(e) => setCourse({...course, title: e.target.value})}
+                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-800 rounded-2xl border-none focus:ring-2 ring-indigo-500 dark:text-white"
+                required
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Price ($)</label>
+              <input
+                type="number"
+                value={course.price}
+                onChange={(e) => setCourse({...course, price: e.target.value})}
+                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-800 rounded-2xl border-none focus:ring-2 ring-indigo-500 dark:text-white"
+                required
+              />
+            </div>
 
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
-          <textarea
-            id="description"
-            name="description"
-            rows="4"
-            value={course.description || ''}
-            onChange={handleChange}
-            required
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          />
-        </div>
-        
-        <div>
-          <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Image URL</label>
-          <input
-            type="url"
-            id="image"
-            name="image"
-            value={course.image || course.imageURL || ''}
-            onChange={handleChange}
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-          />
-        </div>
+            <div>
+              <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Duration</label>
+              <input
+                value={course.duration}
+                onChange={(e) => setCourse({...course, duration: e.target.value})}
+                className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-800 rounded-2xl border-none focus:ring-2 ring-indigo-500 dark:text-white"
+                required
+              />
+            </div>
+          </div>
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="w-full py-3 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition duration-200 disabled:opacity-50"
-        >
-          {submitting ? "Saving Changes..." : "Save Updates"}
-        </button>
-      </form>
+          <div>
+            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Description</label>
+            <textarea
+              rows="4"
+              value={course.description}
+              onChange={(e) => setCourse({...course, description: e.target.value})}
+              className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-800 rounded-2xl border-none focus:ring-2 ring-indigo-500 dark:text-white resize-none"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg flex justify-center items-center gap-2"
+          >
+            {submitting ? <span className="loading loading-spinner"></span> : <><FaSave /> Save Changes</>}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

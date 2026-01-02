@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
-import { IoSunny, IoMoon } from "react-icons/io5";
+import { IoSunny, IoMoon, IoMenu, IoClose } from "react-icons/io5";
 import { useTheme } from "../contexts/ThemeContext";
 
 export default function Header() {
@@ -19,152 +19,90 @@ export default function Header() {
     }
   };
 
-
+  // Professional Standard: 3 links for Guest, 5+ for User
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "Courses", path: "/courses" },
-    ...(user ? [{ name: "Dashboard", path: "/dashboard" }] : []),
-  ]
+    { name: "All Courses", path: "/courses" },
+    { name: "About", path: "/about" },
+    ...(user ? [
+      { name: "Dashboard", path: "/dashboard" },
+      { name: "My Learning", path: "/dashboard/enrolled" }
+    ] : []),
+  ];
 
   return (
-    <header
-      className={`py-4 shadow-md transition-colors duration-300 ${
-        isDarkMode ? "bg-gray-800 text-white" : "bg-white text-gray-800"
-      }`}
-    >
-      <div className="container mx-auto flex justify-between items-center px-4">
-        
-        <Link
-          to="/"
-          className="text-2xl font-bold text-indigo-600 dark:text-indigo-400"
-        >
-          LearnLoop
+    <header className={`sticky top-0 z-50 w-full transition-all duration-300 border-b shadow-sm backdrop-blur-md ${
+      isDarkMode ? "bg-gray-900/90 border-gray-800 text-white" : "bg-white/90 border-gray-100 text-gray-800"
+    }`}>
+      <div className="container mx-auto px-4 h-18 flex justify-between items-center">
+        {/* Brand Logo */}
+        <Link to="/" className="text-2xl font-black tracking-tighter flex items-center gap-2">
+          <span className="bg-indigo-600 text-white px-2 py-1 rounded-lg">LL</span>
+          <span>LearnLoop</span>
         </Link>
 
-        
-        <nav className="hidden md:flex items-center space-x-6">
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <NavLink
               key={link.name}
               to={link.path}
               className={({ isActive }) =>
-                `font-medium transition duration-200 py-1 ${
-                  isActive
-                    ? "text-indigo-600 border-b-2 border-indigo-600 dark:text-indigo-400 dark:border-indigo-400"
-                    : "hover:text-indigo-600 dark:hover:text-indigo-400"
+                `text-sm font-semibold transition-colors hover:text-indigo-600 ${
+                  isActive ? "text-indigo-600" : "text-gray-500 dark:text-gray-400"
                 }`
               }
-              end={link.path === "/"}
             >
               {link.name}
             </NavLink>
           ))}
         </nav>
 
-        
-        <div className="flex items-center space-x-4">
-          
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-          >
-            {isDarkMode ? (
-              <IoSunny size={20} className="text-yellow-400" />
-            ) : (
-              <IoMoon size={20} className="text-gray-700" />
-            )}
+        {/* Actions */}
+        <div className="flex items-center gap-4">
+          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            {isDarkMode ? <IoSunny size={20} /> : <IoMoon size={20} />}
           </button>
 
-         
           {user ? (
-            <div className="flex items-center space-x-4">
-              <img
-                src={user.photoURL || "https://i.pravatar.cc/150?img=68"}
-                alt={user.displayName || "User"}
-                className="w-9 h-9 rounded-full cursor-pointer border-2 border-indigo-500 hover:border-indigo-400 transition"
-                title={user.displayName || user.email}
-              />
-              <button
-                onClick={handleLogout}
-                className="hidden sm:block px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-200"
-              >
-                Logout
-              </button>
+            <div className="dropdown dropdown-end">
+              <label tabIndex={0} className="btn btn-ghost btn-circle avatar border-2 border-indigo-500">
+                <div className="w-10 rounded-full">
+                  <img src={user?.photoURL || "https://i.pravatar.cc/150"} alt="User" />
+                </div>
+              </label>
+              <ul tabIndex={0} className="mt-3 z-1 p-2 shadow-xl menu menu-sm dropdown-content bg-base-100 dark:bg-gray-800 rounded-box w-52 border border-gray-100 dark:border-gray-700">
+                <li className="px-4 py-2 font-bold text-indigo-600 border-b border-gray-100 dark:border-gray-700 mb-2">
+                  {user.displayName}
+                </li>
+                <li><Link to="/dashboard">Dashboard Overview</Link></li>
+                <li><Link to="/dashboard/profile">Profile Settings</Link></li>
+                <li><button onClick={handleLogout} className="text-red-500">Logout</button></li>
+              </ul>
             </div>
           ) : (
-            <NavLink
-              to="/login"
-              className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-200"
-            >
-              Login
-            </NavLink>
+            <Link to="/login" className="hidden md:block px-6 py-2 bg-indigo-600 text-white rounded-full font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 dark:shadow-none">
+              Get Started
+            </Link>
           )}
 
-         
-          <button
-            className="md:hidden p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d={
-                  isMenuOpen
-                    ? "M6 18L18 6M6 6l12 12"
-                    : "M4 6h16M4 12h16M4 18h16"
-                }
-              ></path>
-            </svg>
+          {/* Mobile Toggle */}
+          <button className="md:hidden text-2xl" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <IoClose /> : <IoMenu />}
           </button>
         </div>
       </div>
 
-      
+      {/* Mobile Menu */}
       {isMenuOpen && (
-        <nav
-          className={`md:hidden mt-2 border-t ${
-            isDarkMode ? "border-gray-700" : "border-gray-200"
-          }`}
-        >
-          <div className="flex flex-col p-4 space-y-2">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.name}
-                to={link.path}
-                onClick={() => setIsMenuOpen(false)}
-                className={({ isActive }) =>
-                  `block py-2 px-3 rounded text-lg ${
-                    isActive
-                      ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-400"
-                      : "hover:bg-gray-50 dark:hover:bg-gray-700"
-                  }`
-                }
-                end={link.path === "/"}
-              >
-                {link.name}
-              </NavLink>
-            ))}
-            {user && (
-              <button
-                onClick={() => {
-                  handleLogout();
-                  setIsMenuOpen(false);
-                }}
-                className="w-full text-left py-2 px-3 rounded text-lg bg-red-500 text-white hover:bg-red-600 transition"
-              >
-                Logout
-              </button>
-            )}
-          </div>
-        </nav>
+        <div className="md:hidden bg-white dark:bg-gray-900 absolute w-full left-0 p-4 border-b border-gray-100 dark:border-gray-800 flex flex-col gap-4">
+          {navLinks.map((link) => (
+            <Link key={link.name} to={link.path} onClick={() => setIsMenuOpen(false)} className="font-semibold text-lg">
+              {link.name}
+            </Link>
+          ))}
+          {!user && <Link to="/login" className="btn btn-primary w-full">Login</Link>}
+        </div>
       )}
     </header>
   );

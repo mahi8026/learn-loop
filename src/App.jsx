@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayouts";
@@ -15,13 +14,22 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/DashBoard";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./Routes/AdminRoute"; // You need to create this
+import InstructorRoute from "./Routes/InstructorRoute"; // You need to create this
+import About from "./pages/About";
+import Profile from "./pages/Profile";
+import ManageUsers from "./pages/Dashboard/Admin/ManageUsers"; // The component we just built
+import InstructorStats from "./pages/Dashboard/Instructor/InstructorStats";
+import CourseReview from "./pages/Dashboard/Admin/CourseReview";
 
 function App() {
   return (
     <Routes>
+      {/* Public Routes */}
       <Route path="/" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="courses" element={<AllCourses />} />
+        <Route path="about" element={<About />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route
@@ -34,6 +42,7 @@ function App() {
         />
       </Route>
 
+      {/* Role-Based Dashboard Routes */}
       <Route
         path="/dashboard"
         element={
@@ -42,11 +51,82 @@ function App() {
           </ProtectedRoute>
         }
       >
+        {/* Common Routes (All Logged-in Users) */}
         <Route index element={<Dashboard />} />
-        <Route path="add-course" element={<AddCourse />} />
-        <Route path="my-courses" element={<MyCourses />} />
+        <Route path="profile" element={<Profile />} />
+
+        {/* Student Specific */}
         <Route path="enrolled" element={<Enrolled />} />
-        <Route path="update-course/:id" element={<UpdateCourse />} />
+
+        {/* Instructor Specific */}
+        <Route
+          path="add-course"
+          element={
+            <InstructorRoute>
+              <AddCourse />
+            </InstructorRoute>
+          }
+        />
+        <Route
+          path="my-courses"
+          element={
+            <InstructorRoute>
+              <MyCourses />
+            </InstructorRoute>
+          }
+        />
+        <Route
+          path="update-course/:id"
+          element={
+            <InstructorRoute>
+              <UpdateCourse />
+            </InstructorRoute>
+          }
+        />
+        <Route
+          path="instructor-stats"
+          element={
+            <InstructorRoute>
+              <InstructorStats />
+            </InstructorRoute>
+          }
+        />
+
+        {/* Admin Specific */}
+        <Route
+          path="users"
+          element={
+            <AdminRoute>
+              <ManageUsers />
+            </AdminRoute>
+          }
+        />
+
+        <Route
+          path="course-review"
+          element={
+            <AdminRoute>
+              <CourseReview />
+            </AdminRoute>
+          }
+        />
+        {/* Placeholder for other admin routes */}
+        <Route
+          path="stats"
+          element={
+            <AdminRoute>
+              <div>Platform Analytics Coming Soon</div>
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="course-review"
+          element={
+            <AdminRoute>
+              <div>Course Approval Coming Soon</div>
+            </AdminRoute>
+          }
+        />
       </Route>
 
       <Route path="*" element={<NotFound />} />

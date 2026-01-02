@@ -1,4 +1,26 @@
 @import "tailwindcss";
-@plugin "daisyui"{
-     
+
+@plugin "daisyui" {
+  themes: light, dark, cupcke; 
+}
+
+@theme {
+  --color-indigo-600: #4f46e5;
+  --color-indigo-700: #4338ca;
+  --spacing-18: 4.5rem;
+  
+  /* Professional Border Radius */
+  --radius-3xl: 1.5rem;
+  --radius-4xl: 2rem;
+}
+
+/* Base styles for smooth scrolling and dark mode transitions */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply antialiased transition-colors duration-300;
+  }
 }

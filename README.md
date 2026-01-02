@@ -1,16 +1,33 @@
-# React + Vite
+# 🌀 LearnLoop | Professional E-Learning Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+LearnLoop is a high-performance, full-stack e-learning marketplace designed for modern learners and instructors. Built with the **MERN stack**, it features a professional UI/UX, secure authentication, and a robust dashboard system.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## React Compiler
+## 🚀 Live Demo
+**Frontend:** [Your Vercel Link Here]  
+**Backend:** [Your Render/Heroku Link Here]
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## ✨ Key Features
 
-## Expanding the ESLint configuration
+- **Professional UI/UX:** Built with Tailwind CSS and Framer Motion for smooth, high-end animations.
+- **Dual Dashboard System:** Dedicated interfaces for students to track progress and instructors to manage content.
+- **Secure Authentication:** Firebase integration for Email/Password and Google Social Login.
+- **Dynamic Course Management:** Full CRUD operations for courses, including category filtering and price management.
+- **Dark Mode Support:** System-wide theme switching for enhanced accessibility.
+- **Responsive Design:** Fully optimized for Mobile, Tablet, and Desktop views.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+
+- **Frontend:** React 19, Vite, Tailwind CSS, Framer Motion, React Router 7.
+- **Backend:** Node.js, Express.
+- **Database:** MongoDB (Atlas).
+- **Security:** Firebase Auth, Environment variables (VITE_).
+- **State/UI Management:** Context API, React-Toastify, React-Helmet.
+
+## 📦 Installation & Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/yourusername/learn-loop.git](https://github.com/yourusername/learn-loop.git)
+   cd learn-loop
