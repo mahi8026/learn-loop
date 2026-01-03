@@ -21,6 +21,7 @@ import Profile from "./pages/Profile";
 import ManageUsers from "./pages/Dashboard/Admin/ManageUsers"; // The component we just built
 import InstructorStats from "./pages/Dashboard/Instructor/InstructorStats";
 import CourseReview from "./pages/Dashboard/Admin/CourseReview";
+import AdminStats from "./pages/Dashboard/Admin/AdminStats";
 
 function App() {
   return (
@@ -56,7 +57,7 @@ function App() {
         <Route path="profile" element={<Profile />} />
 
         {/* Student Specific */}
-        <Route path="enrolled" element={<Enrolled />} />
+        <Route path="my-enrollments" element={<Enrolled />} />
 
         {/* Instructor Specific */}
         <Route
@@ -115,15 +116,7 @@ function App() {
           path="stats"
           element={
             <AdminRoute>
-              <div>Platform Analytics Coming Soon</div>
-            </AdminRoute>
-          }
-        />
-        <Route
-          path="course-review"
-          element={
-            <AdminRoute>
-              <div>Course Approval Coming Soon</div>
+              <AdminStats></AdminStats>
             </AdminRoute>
           }
         />

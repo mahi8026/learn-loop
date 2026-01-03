@@ -3,23 +3,28 @@ import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 import { FcGoogle } from "react-icons/fc";
+import { IoFlashOutline, IoShieldCheckmarkOutline } from "react-icons/io5";
 
 export default function Login() {
-  const { login, loginWithGoogle } = useAuth(); // Corrected names
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/dashboard";
+  const from = location.state?.from?.pathname || "/";
 
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
-  // Requirement: Demo Credentials
-  const handleDemoLogin = () => {
-    setForm({ email: "instructor@learnloop.com", password: "Password123!" });
-    toast.info("Demo credentials filled!");
+  // Auto-fill logic for Demo Credentials
+  const handleDemoLogin = (role) => {
+    if (role === 'admin') {
+      setForm({ email: "admin@learnloop.com", password: "AdminPassword123!" });
+      toast.success("Admin credentials filled!");
+    } else {
+      setForm({ email: "Instructor@learnloop.com", password: "StudentPassword123!" });
+      toast.success("Student credentials filled!");
+    }
   };
 
-  // Google Login Handler
   const handleGoogleSignIn = async () => {
     try {
       await loginWithGoogle();
@@ -30,7 +35,6 @@ export default function Login() {
     }
   };
 
-  // Email/Password Handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -46,59 +50,83 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4 py-12">
-      <div className="max-w-md w-full bg-white dark:bg-gray-900 rounded-3xl shadow-xl p-10 border border-gray-100 dark:border-gray-800">
+    <div className="min-h-screen flex items-center justify-center bg-bg-main px-4 py-12 relative overflow-hidden">
+      {/* Background Ambient Glows */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 blur-[120px] rounded-full" />
+      
+      <div className="max-w-md w-full bg-bg-card/80 backdrop-blur-xl rounded-[2.5rem] shadow-2xl p-8 md:p-10 border border-white/5 z-10">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-black dark:text-white">Login</h2>
-          <p className="text-gray-500 mt-2">Access your learning dashboard</p>
+          <h2 className="text-4xl font-black text-white tracking-tight">Login</h2>
+          <p className="text-slate-500 mt-3">Access your learning dashboard</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+            <label className="block text-sm font-bold text-slate-300 mb-2 ml-1">Email Address</label>
             <input
               type="email"
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 ring-indigo-500 dark:text-white transition-all outline-none"
-              placeholder="name@company.com"
+              className="w-full px-6 py-4 bg-bg-main/50 border border-white/5 rounded-2xl focus:ring-2 ring-primary outline-none text-white placeholder:text-slate-600 transition-all"
+              placeholder="name@example.com"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Password</label>
+            <label className="block text-sm font-bold text-slate-300 mb-2 ml-1">Password</label>
             <input
               type="password"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
-              className="w-full px-5 py-4 bg-gray-50 dark:bg-gray-800 border-none rounded-2xl focus:ring-2 ring-indigo-500 dark:text-white transition-all outline-none"
+              className="w-full px-6 py-4 bg-bg-main/50 border border-white/5 rounded-2xl focus:ring-2 ring-primary outline-none text-white placeholder:text-slate-600 transition-all"
               placeholder="••••••••"
               required
             />
           </div>
 
-          <button type="submit" disabled={loading} className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 dark:shadow-none">
-            {loading ? <span className="loading loading-spinner"></span> : "Sign In"}
+          <button 
+            type="submit" 
+            disabled={loading} 
+            className="w-full py-4 bg-primary text-white rounded-2xl font-bold hover:bg-primary-focus transition-all shadow-lg shadow-primary/20 flex justify-center items-center"
+          >
+            {loading ? <span className="loading loading-spinner loading-md"></span> : "Sign In"}
           </button>
         </form>
 
         <div className="relative my-8">
-          <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-100 dark:border-gray-800"></div></div>
-          <div className="relative flex justify-center text-sm"><span className="px-2 bg-white dark:bg-gray-900 text-gray-500">Or continue with</span></div>
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-white/5"></div>
+          </div>
+          <div className="relative flex justify-center text-xs uppercase tracking-widest font-bold">
+            <span className="px-4 bg-bg-card text-slate-500">Quick Access</span>
+          </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          {/* Corrected onClick call */}
-          <button onClick={handleGoogleSignIn} className="flex items-center justify-center gap-2 py-3 border border-gray-200 dark:border-gray-700 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all dark:text-white">
-            <FcGoogle size={20}/> Google
+        {/* Demo Buttons Grid */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          <button 
+            onClick={() => handleDemoLogin('instructor')}
+            className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/5 rounded-xl text-xs font-bold text-slate-300 hover:bg-white/10 transition-all"
+          >
+            <IoFlashOutline className="text-amber-400" /> Demo Instructor
           </button>
-          <button onClick={handleDemoLogin} className="flex items-center justify-center gap-2 py-3 bg-emerald-50 text-emerald-600 rounded-2xl font-bold hover:bg-emerald-100 transition-all">
-            Demo User
+          <button 
+            onClick={() => handleDemoLogin('admin')}
+            className="flex items-center justify-center gap-2 py-3 bg-white/5 border border-white/5 rounded-xl text-xs font-bold text-slate-300 hover:bg-white/10 transition-all"
+          >
+            <IoShieldCheckmarkOutline className="text-emerald-400" /> Demo Admin
           </button>
         </div>
 
-        <p className="mt-8 text-center text-sm text-gray-500">
-          New to LearnLoop? <Link to="/register" className="text-indigo-600 font-bold hover:underline">Create Account</Link>
+        <button 
+          onClick={handleGoogleSignIn} 
+          className="w-full flex items-center justify-center gap-3 py-4 bg-white/5 border border-white/5 rounded-2xl font-bold text-white hover:bg-white/10 transition-all"
+        >
+          <FcGoogle size={20}/> Sign in with Google
+        </button>
+
+        <p className="mt-8 text-center text-sm text-slate-500">
+          New to LearnLoop? <Link to="/register" className="text-primary font-bold hover:underline">Create Account</Link>
         </p>
       </div>
     </div>

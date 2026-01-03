@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
@@ -9,6 +9,14 @@ export default function Header() {
   const { user, logout } = useAuth();
   const { isDarkMode, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Detect scroll to adjust glass density if desired
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -19,7 +27,6 @@ export default function Header() {
     }
   };
 
-  // Professional Standard: 3 links for Guest, 5+ for User
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "All Courses", path: "/courses" },
@@ -31,14 +38,18 @@ export default function Header() {
   ];
 
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 border-b shadow-sm backdrop-blur-md ${
-      isDarkMode ? "bg-gray-900/90 border-gray-800 text-white" : "bg-white/90 border-gray-100 text-gray-800"
-    }`}>
-      <div className="container mx-auto px-4 h-18 flex justify-between items-center">
-        {/* Brand Logo */}
-        <Link to="/" className="text-2xl font-black tracking-tighter flex items-center gap-2">
-          <span className="bg-indigo-600 text-white px-2 py-1 rounded-lg">LL</span>
-          <span>LearnLoop</span>
+    <header 
+      className={`sticky rounded-b-xl top-0 z-100 w-full transition-all duration-300 border-b 
+      ${scrolled ? "py-2" : "py-4"} 
+      ${isDarkMode 
+        ? "bg-[#0f1117]/70 border-white/10" 
+        : "bg-white/1 border-slate-500/50"} 
+      backdrop-blur-sm`} // backdrop-blur-xl creates the heavy frosted glass effect
+    >
+      <div className="container mx-auto px-4 flex justify-between items-center">
+        <Link to="/" className="text-2xl font-black tracking-tighter flex items-center gap-2 group">
+          <span className="bg-indigo-600 text-white px-2 py-1 rounded-lg group-hover:rotate-6 transition-transform">LL</span>
+          <span className={`${isDarkMode ? "text-white" : "text-slate-900"}`}>LearnLoop</span>
         </Link>
 
         {/* Desktop Nav */}
@@ -48,8 +59,10 @@ export default function Header() {
               key={link.name}
               to={link.path}
               className={({ isActive }) =>
-                `text-sm font-semibold transition-colors hover:text-indigo-600 ${
-                  isActive ? "text-indigo-600" : "text-gray-500 dark:text-gray-400"
+                `text-xs uppercase tracking-widest font-bold transition-all hover:text-indigo-500 ${
+                  isActive 
+                    ? "text-indigo-600" 
+                    : isDarkMode ? "text-slate-400" : "text-slate-500"
                 }`
               }
             >
@@ -59,49 +72,70 @@ export default function Header() {
         </nav>
 
         {/* Actions */}
-        <div className="flex items-center gap-4">
-          <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-            {isDarkMode ? <IoSunny size={20} /> : <IoMoon size={20} />}
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={toggleTheme} 
+            className={`p-2 rounded-xl transition-colors ${
+              isDarkMode ? "bg-white/5 text-yellow-400" : "bg-slate-100 text-slate-600"
+            }`}
+          >
+            {isDarkMode ? <IoSunny size={24} /> : <IoMoon size={24} />}
           </button>
 
           {user ? (
             <div className="dropdown dropdown-end">
-              <label tabIndex={0} className="btn btn-ghost btn-circle avatar border-2 border-indigo-500">
-                <div className="w-10 rounded-full">
+              <label tabIndex={0} className="btn btn-ghost btn-circle avatar border border-indigo-500/50">
+                <div className="w-9 rounded-full">
                   <img src={user?.photoURL || "https://i.pravatar.cc/150"} alt="User" />
                 </div>
               </label>
-              <ul tabIndex={0} className="mt-3 z-1 p-2 shadow-xl menu menu-sm dropdown-content bg-base-100 dark:bg-gray-800 rounded-box w-52 border border-gray-100 dark:border-gray-700">
-                <li className="px-4 py-2 font-bold text-indigo-600 border-b border-gray-100 dark:border-gray-700 mb-2">
-                  {user.displayName}
+              <ul tabIndex={0} className="mt-4 z-10 p-2 shadow-2xl menu menu-sm dropdown-content bg-white dark:bg-[#1a1c23] rounded-2xl w-56 border border-slate-200 dark:border-white/10 backdrop-blur-2xl">
+                <li className="px-4 py-3 border-b border-slate-100 dark:border-white/5 mb-2">
+                  <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold">Signed in as</p>
+                  <p className="font-bold text-slate-900 dark:text-white truncate">{user.displayName}</p>
                 </li>
-                <li><Link to="/dashboard">Dashboard Overview</Link></li>
-                <li><Link to="/dashboard/profile">Profile Settings</Link></li>
-                <li><button onClick={handleLogout} className="text-red-500">Logout</button></li>
+                <li><Link className="py-2" to="/dashboard">Dashboard</Link></li>
+                <li><Link className="py-2" to="/dashboard/profile">Settings</Link></li>
+                <li><button onClick={handleLogout} className="text-red-500 font-bold py-2">Logout</button></li>
               </ul>
             </div>
           ) : (
-            <Link to="/login" className="hidden md:block px-6 py-2 bg-indigo-600 text-white rounded-full font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 dark:shadow-none">
+            <Link 
+              to="/login" 
+              className="hidden md:flex px-5 py-2 bg-indigo-600 text-white rounded-xl text-xs font-black uppercase tracking-wider hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20"
+            >
               Get Started
             </Link>
           )}
 
           {/* Mobile Toggle */}
-          <button className="md:hidden text-2xl" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <IoClose /> : <IoMenu />}
+          <button 
+            className={`md:hidden p-2 rounded-lg ${isDarkMode ? "text-white" : "text-slate-900"}`} 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <IoClose size={24} /> : <IoMenu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Integrated Glassmorphism */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-900 absolute w-full left-0 p-4 border-b border-gray-100 dark:border-gray-800 flex flex-col gap-4">
+        <div className="md:hidden absolute w-[95%] left-1/2 -translate-x-1/2 top-20 p-6 rounded-2xl border border-white/10 shadow-2xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl flex flex-col gap-6">
           {navLinks.map((link) => (
-            <Link key={link.name} to={link.path} onClick={() => setIsMenuOpen(false)} className="font-semibold text-lg">
+            <Link 
+              key={link.name} 
+              to={link.path} 
+              onClick={() => setIsMenuOpen(false)} 
+              className="font-bold text-sm uppercase tracking-widest text-slate-600 dark:text-slate-300"
+            >
               {link.name}
             </Link>
           ))}
-          {!user && <Link to="/login" className="btn btn-primary w-full">Login</Link>}
+          {!user && (
+            <Link to="/login" className="py-3 bg-indigo-600 text-white rounded-xl text-center font-bold text-sm">
+              Login
+            </Link>
+          )}
         </div>
       )}
     </header>

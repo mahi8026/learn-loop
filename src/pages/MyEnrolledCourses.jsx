@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import useAxiosSecure from "../hooks/useAxiosSecure"; // Import our secure hook
 import { useAuth } from "../contexts/AuthContext";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -7,104 +7,92 @@ import { Helmet } from "react-helmet";
 
 export default function MyEnrolledCourses() {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure(); // Use secure instance
   const [enrollments, setEnrollments] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = "My Enrolled Courses - LearnLoop";
-  }, []);
-
-  useEffect(() => {
     if (user?.email) {
       setLoading(true);
-      // ⚠️ Fetch enrollments using the user's email
-      axios
-        .get(`${import.meta.env.VITE_API_URL}/enrolled?email=${user.email}`)
-        .then(async (res) => {
-          const enrolledData = res.data;
-          
-          // ⚠️ Challenge: Fetch the full course details for each enrollment
-          // This requires a separate request for each course ID unless you implement aggregation on the backend.
-          const coursePromises = enrolledData.map(enrollment =>
-            axios.get(`${import.meta.env.VITE_API_URL}/courses/${enrollment.courseId}`)
-          );
-
-          const courseResponses = await Promise.all(coursePromises);
-          const courses = courseResponses.map(r => r.data);
-          
-          // Merge course details back into enrollments
-          const finalEnrollments = enrolledData.map((enrollment, index) => ({
-              ...enrollment,
-              courseDetails: courses[index], // Attach the full course object
-          }));
-          
-          setEnrollments(finalEnrollments.filter(e => e.courseDetails)); // Filter out any failed course fetches
+      // We use the secure endpoint that verifies the JWT token
+      axiosSecure
+        .get(`/enrolled/${user.email}`)
+        .then((res) => {
+          setEnrollments(res.data);
         })
         .catch((err) => {
-            console.error(err);
-            toast.error("Failed to fetch your enrolled courses.");
+          console.error(err);
+          toast.error("Failed to fetch your enrolled courses.");
         })
         .finally(() => setLoading(false));
     }
-  }, [user]);
-  
-  // Helper function to format the enrollment date
+  }, [user?.email, axiosSecure]);
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString("en-US", {
-        year: 'numeric', month: 'short', day: 'numeric'
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 min-h-screen dark:bg-gray-900">
+    <div className="container mx-auto px-4 py-12 min-h-screen">
       <Helmet>
-        <title>My Enrolled Courses</title>
+        <title>My Learning | LearnLoop</title>
       </Helmet>
-      
-      <h1 className="text-4xl font-extrabold mb-8 text-gray-900 dark:text-white border-b pb-2">
-        My Enrolled Courses
-      </h1>
 
-      {loading && (
-        <div className="text-center py-12 text-indigo-500">Loading your enrolled courses...</div>
-      )}
+      <div className="mb-10">
+        <h1 className="text-4xl font-black text-gray-900 dark:text-white uppercase tracking-tight">
+          My Learning <span className="text-indigo-600">Journey</span>
+        </h1>
+        <p className="text-gray-500 mt-2">All your enrolled courses in one place.</p>
+      </div>
 
-      {!loading && enrollments.length === 0 && (
-        <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-          You are not currently enrolled in any courses.
-          <Link to="/courses" className="text-indigo-600 dark:text-indigo-400 ml-2 hover:underline">
-            Explore courses
+      {loading ? (
+        <div className="flex justify-center py-20">
+          <span className="loading loading-bars loading-lg text-indigo-600"></span>
+        </div>
+      ) : enrollments.length === 0 ? (
+        <div className="text-center py-20 bg-gray-50 dark:bg-gray-800/50 rounded-[3rem] border-2 border-dashed border-gray-200 dark:border-gray-700">
+          <h2 className="text-xl font-bold dark:text-white">No courses joined yet</h2>
+          <Link to="/courses" className="btn btn-primary mt-6 rounded-xl">
+            Browse Catalog
           </Link>
         </div>
-      )}
-
-      {!loading && enrollments.length > 0 && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {enrollments.map((e) => (
-            <div 
-              key={e._id} 
-              className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg transition-all duration-300 hover:shadow-2xl flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
+            <div
+              key={e._id}
+              className="group bg-white dark:bg-gray-800 rounded-[2rem] border border-gray-100 dark:border-gray-700 p-2 flex flex-col sm:flex-row gap-6 hover:shadow-2xl transition-all duration-300"
             >
-              <img
-                src={e.courseDetails?.imageURL || e.courseDetails?.image || 'https://placehold.co/100x100/5B5B5B/FFFFFF?text=Course'}
-                alt={e.courseDetails?.title || "Course"}
-                className="w-full sm:w-24 h-24 object-cover rounded-lg shrink-0"
-              />
-              <div className="flex flex-col grow">
-                <h3 className="text-xl font-bold mb-1 text-gray-900 dark:text-white">{e.courseDetails?.title || "Unknown Course"}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Category: {e.courseDetails?.category || 'N/A'}
+              <div className="w-full sm:w-48 h-40 overflow-hidden rounded-2xl">
+                <img
+                  src={e.courseDetails?.image || e.courseDetails?.imageURL}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  alt=""
+                />
+              </div>
+              <div className="flex flex-col justify-center pr-4 py-4 sm:py-0">
+                <span className="text-[10px] font-black uppercase text-indigo-600 tracking-widest mb-1">
+                  {e.courseDetails?.category}
+                </span>
+                <h3 className="text-xl font-bold dark:text-white leading-tight mb-2">
+                  {e.courseDetails?.title}
+                </h3>
+                <p className="text-xs text-gray-400 font-medium">
+                  Enrolled: {formatDate(e.enrolledAt)}
                 </p>
-                <p className="text-sm text-green-600 dark:text-green-400 font-medium mt-1">
-                  Enrolled On: {formatDate(e.enrolledAt)}
-                </p>
-                
-                <div className="mt-4">
-                  <Link 
-                    to={`/courses/${e.courseDetails?._id}`} 
-                    className="px-4 py-2 text-sm font-medium rounded-lg bg-indigo-500 text-white hover:bg-indigo-600 transition"
+                <div className="mt-6">
+                  <Link
+                    to={`/courses/${e.courseId}`}
+                    className="inline-flex items-center text-sm font-bold text-gray-900 dark:text-white hover:text-indigo-600 transition-colors"
                   >
-                    Start Learning
+                    Continue Learning
+                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
                   </Link>
                 </div>
               </div>

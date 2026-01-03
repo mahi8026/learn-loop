@@ -1,17 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
-import { FaUserEdit, FaCamera, FaEnvelope, FaIdBadge } from "react-icons/fa";
+import { FaUserEdit, FaCamera, FaEnvelope, FaIdBadge, FaShieldAlt } from "react-icons/fa";
 import { motion } from "framer-motion";
+import axios from "axios";
 
 export default function Profile() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [role, setRole] = useState("student"); // Default role
   const [formData, setFormData] = useState({
     displayName: user?.displayName || "",
     photoURL: user?.photoURL || "",
   });
+
+  // Fetch real-time role from MongoDB
+  useEffect(() => {
+    if (user?.email) {
+      axios.get(`${import.meta.env.VITE_API_URL}/users/role/${user.email}`)
+        .then(res => {
+          setRole(res.data.role);
+        })
+        .catch(err => console.error("Error fetching role:", err));
+    }
+  }, [user?.email]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -58,13 +71,22 @@ export default function Profile() {
             </div>
             <h3 className="text-xl font-bold dark:text-white">{user?.displayName || "Member"}</h3>
             <p className="text-sm text-gray-500 mb-6">{user?.email}</p>
+            
+            {/* CORRECT ROLE BADGES */}
             <div className="flex justify-center gap-2">
-              <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 text-xs font-bold rounded-full uppercase">
-                Student
-              </span>
-              {user?.email === "admin@learnloop.com" && (
+              {role === "admin" && (
+                <span className="px-3 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-600 dark:text-rose-400 text-xs font-bold rounded-full uppercase flex items-center gap-1">
+                  <FaShieldAlt size={10} /> Admin
+                </span>
+              )}
+              {role === "instructor" && (
                 <span className="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 text-xs font-bold rounded-full uppercase">
                   Instructor
+                </span>
+              )}
+              {role === "student" && (
+                <span className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 text-xs font-bold rounded-full uppercase">
+                  Student
                 </span>
               )}
             </div>

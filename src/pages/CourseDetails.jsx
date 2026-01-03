@@ -1,38 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useAuth } from "../contexts/AuthContext";
 import { Helmet } from "react-helmet";
 import { FaCheckCircle, FaUsers, FaPlayCircle } from "react-icons/fa";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 export default function CourseDetails() {
   const { id } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
   const [course, setCourse] = useState(null);
   const [enrolling, setEnrolling] = useState(false);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/courses/${id}`)
+    axiosSecure.get(`/courses/${id}`)
       .then((r) => setCourse(r.data))
       .catch(() => toast.error("Course not found"));
-  }, [id]);
+  }, [id, axiosSecure]);
 
   const handleEnroll = async () => {
-    if (!user) return navigate("/login", { state: { from: `/courses/${id}` } });
+    if (!user) {
+      toast.info("Please login to enroll");
+      return navigate("/login", { state: { from: `/courses/${id}` } });
+    }
     
     setEnrolling(true);
     try {
       const payload = {
         courseId: id,
+        title: course.title,
+        price: course.price,
+        instructorEmail: course.instructorEmail,
         userEmail: user.email,
         userName: user.displayName,
         enrolledAt: new Date()
       };
-      await axios.post(`${import.meta.env.VITE_API_URL}/enroll`, payload);
-      toast.success("Welcome to the course!");
-      navigate("/dashboard/enrolled");
+      const res = await axiosSecure.post("/enroll", payload);
+      
+      if (res.data.success) {
+        toast.success("Welcome to the course!");
+        navigate("/dashboard/my-enrollments");
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || "Enrollment failed");
     } finally {
@@ -40,7 +50,15 @@ export default function CourseDetails() {
     }
   };
 
-  if (!course) return <div className="min-h-screen flex items-center justify-center"><span className="loading loading-dots loading-lg text-indigo-600"></span></div>;
+  // --- CRITICAL SAFETY CHECK ---
+  // This prevents the page from crashing while 'course' is still null
+  if (!course) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-950">
+        <span className="loading loading-ring loading-lg text-indigo-500"></span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
