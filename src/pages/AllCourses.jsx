@@ -39,7 +39,9 @@ export default function AllCourses() {
     const fetchCourses = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/courses`, {
+          withCredentials: true 
+        });
         setCourses(res.data);
       } catch (err) {
         console.error("Error fetching courses:", err);
