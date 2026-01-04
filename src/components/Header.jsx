@@ -11,7 +11,6 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Detect scroll to adjust glass density if desired
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -33,23 +32,20 @@ export default function Header() {
     { name: "About", path: "/about" },
     ...(user ? [
       { name: "Dashboard", path: "/dashboard" },
-      { name: "My Learning", path: "/dashboard/enrolled" }
+      { name: "My Learning", path: "/dashboard/my-enrollments" }
     ] : []),
   ];
 
   return (
     <header 
       className={`sticky rounded-b-xl top-0 z-100 w-full transition-all duration-300 border-b 
-      ${scrolled ? "py-2" : "py-4"} 
-      ${isDarkMode 
-        ? "bg-[#0f1117]/70 border-white/10" 
-        : "bg-white/1 border-slate-500/50"} 
-      backdrop-blur-sm`} // backdrop-blur-xl creates the heavy frosted glass effect
+      ${scrolled ? "py-2 shadow-lg" : "py-4"}
+  bg-bg-main/70 border-border-subtle backdrop-blur-md`} 
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="text-2xl font-black tracking-tighter flex items-center gap-2 group">
-          <span className="bg-indigo-600 text-white px-2 py-1 rounded-lg group-hover:rotate-6 transition-transform">LL</span>
-          <span className={`${isDarkMode ? "text-white" : "text-slate-900"}`}>LearnLoop</span>
+          <span className="bg-primary text-white px-2 py-1 rounded-lg">LL</span>
+          <span className={`${isDarkMode ? "text-text-title" : "text-indigo-600"}`}>LearnLoop</span>
         </Link>
 
         {/* Desktop Nav */}
@@ -118,7 +114,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu - Integrated Glassmorphism */}
       {isMenuOpen && (
         <div className="md:hidden absolute w-[95%] left-1/2 -translate-x-1/2 top-20 p-6 rounded-2xl border border-white/10 shadow-2xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl flex flex-col gap-6">
           {navLinks.map((link) => (

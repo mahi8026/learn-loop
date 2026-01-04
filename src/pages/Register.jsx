@@ -88,7 +88,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4 py-8">
+    <div className="min-h-screen flex items-center justify-center bg-bg-main  px-4 py-8">
       <div className="max-w-xl w-full bg-white dark:bg-gray-900 rounded-[2.5rem] shadow-2xl p-6 md:p-10 border border-gray-100 dark:border-gray-800">
         <div className="text-center mb-8">
           <h2 className="text-4xl font-black dark:text-white tracking-tight">

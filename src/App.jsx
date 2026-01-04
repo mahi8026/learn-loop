@@ -22,6 +22,9 @@ import ManageUsers from "./pages/Dashboard/Admin/ManageUsers"; // The component 
 import InstructorStats from "./pages/Dashboard/Instructor/InstructorStats";
 import CourseReview from "./pages/Dashboard/Admin/CourseReview";
 import AdminStats from "./pages/Dashboard/Admin/AdminStats";
+import MyEnrolledCourses from "./pages/MyEnrolledCourses";
+import Wishlist from "./pages/Wishlist";
+import Certificates from "./pages/Certificates";
 
 function App() {
   return (
@@ -57,7 +60,9 @@ function App() {
         <Route path="profile" element={<Profile />} />
 
         {/* Student Specific */}
-        <Route path="my-enrollments" element={<Enrolled />} />
+        <Route path="my-enrollments" element={<MyEnrolledCourses />} />
+        <Route path="wishlist" element={<Wishlist />} />
+        <Route path="certificates" element={<Certificates />} />
 
         {/* Instructor Specific */}
         <Route
@@ -111,7 +116,6 @@ function App() {
             </AdminRoute>
           }
         />
-        {/* Placeholder for other admin routes */}
         <Route
           path="stats"
           element={

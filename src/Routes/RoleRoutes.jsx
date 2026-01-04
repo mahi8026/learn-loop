@@ -15,7 +15,6 @@ export const AdminRoute = ({ children }) => {
   return <Navigate to="/login" state={{ from: location }} replace />;
 };
 
-// Instructor Route: Only allows "instructor"
 export const InstructorRoute = ({ children }) => {
   const { user, dbUser, loading } = useAuth();
   const location = useLocation();

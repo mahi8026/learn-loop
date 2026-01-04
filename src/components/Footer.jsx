@@ -35,10 +35,10 @@ const Footer = () => {
         <div>
           <h4 className="text-white font-bold mb-6">Social</h4>
           <div className="flex gap-4 text-xl">
-            <a href="#" className="hover:text-indigo-500 transition-colors"><FaTwitter size={28} /></a>
-            <a href="#" className="hover:text-indigo-500 transition-colors"><FaInstagram size={28} /> </a>
-            <a href="#" className="hover:text-indigo-500 transition-colors"><FaGithub size={28} /></a>
-            <a href="#" className="hover:text-indigo-500 transition-colors"><FaLinkedin size={28} /></a>
+            <a href="https://x.com/home" className="hover:text-indigo-500 transition-colors"><FaTwitter size={28} /></a>
+            <a href="https://www.instagram.com/mahim8026/" className="hover:text-indigo-500 transition-colors"><FaInstagram size={28} /> </a>
+            <a href="https://github.com/" className="hover:text-indigo-500 transition-colors"><FaGithub size={28} /></a>
+            <a href="linkedin.com/in/mahimrahman-dev/" className="hover:text-indigo-500 transition-colors"><FaLinkedin size={28} /></a>
           </div>
         </div>
       </div>

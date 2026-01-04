@@ -14,7 +14,6 @@ export default function MyEnrolledCourses() {
   useEffect(() => {
     if (user?.email) {
       setLoading(true);
-      // We use the secure endpoint that verifies the JWT token
       axiosSecure
         .get(`/enrolled/${user.email}`)
         .then((res) => {

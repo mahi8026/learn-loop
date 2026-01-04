@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import axios from "axios";
 import {
   FaBookOpen,
   FaUsers,
@@ -186,7 +185,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* New "Become an Instructor" CTA for Students */}
         <div className="bg-linear-to-br from-indigo-600 to-purple-700 rounded-[2.5rem] p-10 text-white flex flex-col justify-between relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-125 transition-transform duration-700">
             <FaGraduationCap size={120} />

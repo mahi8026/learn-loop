@@ -24,7 +24,7 @@ createRoot(document.getElementById("root")).render(
             pauseOnFocusLoss
             draggable
             pauseOnHover
-            theme="dark" // Matches your LearnLoop dark aesthetic
+            theme="dark" 
           />
         </ThemeProvider>
       </AuthProvider>

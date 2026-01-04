@@ -37,11 +37,7 @@ export default function DashboardLayout() {
     }
   };
 
-  /**
-   * Generates dynamic links based on the user's role from MongoDB
-   */
   const getSidebarLinks = (role) => {
-    // Convert to lowercase to ensure it matches 'admin', 'instructor', or 'student'
     const currentRole = role?.toLowerCase() || "student";
 
     const common = [
@@ -98,7 +94,7 @@ export default function DashboardLayout() {
       student: [
         {
           name: "My Learning",
-          path: "/dashboard/enrolled",
+          path: "/dashboard/my-enrollments",
           icon: <FaGraduationCap />,
           end: false,
         },
@@ -120,7 +116,6 @@ export default function DashboardLayout() {
     return [...common, ...(roleLinks[currentRole] || roleLinks.student)];
   };
 
-  // 1. Show Loading Spinner while fetching DB user
   if (loading) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
@@ -129,7 +124,6 @@ export default function DashboardLayout() {
     );
   }
 
-  // 2. Generate the active links based on the verified role
   const activeLinks = getSidebarLinks(dbUser?.role);
 
 

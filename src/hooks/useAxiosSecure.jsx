@@ -13,7 +13,6 @@ const useAxiosSecure = () => {
   useEffect(() => {
     const requestInterceptor = axiosSecure.interceptors.request.use(
       (config) => {
-        // GET DIRECTLY FROM STORAGE TO AVOID CIRCULAR IMPORT
         const token = localStorage.getItem("access-token");
         if (token) {
           config.headers.authorization = `Bearer ${token}`;

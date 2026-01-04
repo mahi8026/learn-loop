@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     setLoading(true);
     try {
-      localStorage.removeItem("access-token"); // Clear token immediately
+      localStorage.removeItem("access-token"); 
       return await signOut(auth);
     } finally {
       setLoading(false);
@@ -77,9 +77,6 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
-  // Observe Auth State & Sync JWT
-  // Add this inside your onAuthStateChanged in AuthContext.jsx
-  // Inside AuthContext.jsx
 useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
     setUser(currentUser);
