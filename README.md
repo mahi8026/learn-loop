@@ -10,13 +10,12 @@ LearnLoop is a high-performance, full-stack e-learning marketplace designed for 
 ## 🚀 Live Demo
 
 - **Frontend:** [Click Here to Visit LearnLoop](https://learn-loop-edcf7.web.app/)
-- **Backend API:** [Link to Server (Optional)]
 
 ## 📸 Screenshots
 
 | Landing Page | User Dashboard |
 |:---:|:---:|
-| ![Home](https://via.placeholder.com/400x200?text=Upload+Home+SS) | ![Dashboard](https://via.placeholder.com/400x200?text=Upload+Dashboard+SS) |
+| ![Home](https://i.ibb.co.com/WpVnSWw9/Screenshot-2026-01-20-001021.png/400x200?text=Upload+Home+SS) | ![Dashboard](https://i.ibb.co.com/CqBzZM8/Screenshot-2026-01-20-004924.png/400x200?text=Upload+Dashboard+SS) |
 
 ## ✨ Key Features
 
