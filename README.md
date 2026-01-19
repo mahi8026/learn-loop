@@ -5,7 +5,7 @@ LearnLoop is a high-performance, full-stack e-learning marketplace designed for 
 
 
 ## 🚀 Live Demo
-**Frontend:** Working assignment 10
+**Frontend:** [Working assignment 10](https://learn-loop-edcf7.web.app/)
 **Backend:** 
 
 ## ✨ Key Features
