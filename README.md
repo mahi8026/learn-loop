@@ -4,9 +4,19 @@ LearnLoop is a high-performance, full-stack e-learning marketplace designed for 
 
 
 
+![Project Banner](https://i.ibb.co.com/WpVnSWw9/Screenshot-2026-01-20-001021.png/1000x300?text=LearnLoop+Banner+Placeholder) 
+LearnLoop is a high-performance, full-stack e-learning marketplace designed for modern learners and instructors. Built with the **MERN stack**, it features a professional UI/UX, secure authentication, and a robust dashboard system to democratize online education.
+
 ## 🚀 Live Demo
-**Frontend:** [Working assignment 10](https://learn-loop-edcf7.web.app/)
-**Backend:** 
+
+- **Frontend:** [Click Here to Visit LearnLoop](https://learn-loop-edcf7.web.app/)
+- **Backend API:** [Link to Server (Optional)]
+
+## 📸 Screenshots
+
+| Landing Page | User Dashboard |
+|:---:|:---:|
+| ![Home](https://via.placeholder.com/400x200?text=Upload+Home+SS) | ![Dashboard](https://via.placeholder.com/400x200?text=Upload+Dashboard+SS) |
 
 ## ✨ Key Features
 
